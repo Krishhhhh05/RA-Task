@@ -1,6 +1,5 @@
 
 import streamlit as st
-from streamlit_tags import st_tags
 import requests
 import pandas as pd
 import nltk
