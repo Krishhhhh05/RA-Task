@@ -1,4 +1,4 @@
-# app.py - Streamlit News Aggregator (cleaned + dynamic graphs + scraping fallback)
+
 import streamlit as st
 from streamlit_tags import st_tags
 import requests
@@ -12,26 +12,25 @@ from PIL import Image
 import plotly.express as px
 import io
 
-# --- PAGE CONFIG ---
+
 st.set_page_config(page_title="News Aggregator", page_icon="📰", layout="wide")
 st.title("📰 Multi-Topic News Aggregator with Sentiment Analysis")
 tab_news, tab_chatbot = st.tabs(["News Aggregator", "Chatbot"])
-# --- SESSION STATE ---
+
 if "topics" not in st.session_state:
     st.session_state.topics = []
 if "articles_cache" not in st.session_state:
     st.session_state.articles_cache = {}
 
-# --- INPUT: allow up to 3 topics ---
 
-# --- Sentiment icons ---
+
 SENTIMENT_ICONS = {"Positive": "😊", "Negative": "😠", "Neutral": "😐"}
 
-# --- Google CSE Config (replace with env vars if preferred) ---
-API_KEY = "AIzaSyBZnwrh5s7s3TMoQ0fkxE6fbkX-AlGaHdw"  # <--- replace if needed
-CX = "d5efb0c0edff34023"  # <--- your cx
 
-# ---------- Helper functions ----------
+API_KEY = "AIzaSyBZnwrh5s7s3TMoQ0fkxE6fbkX-AlGaHdw"  
+CX = "d5efb0c0edff34023"  
+
+
 def extract_best_text(item):
     """
     Given a Google CSE item, attempt:
@@ -43,19 +42,15 @@ def extract_best_text(item):
     pagemap = item.get("pagemap", {})
     metatags = (pagemap.get("metatags") or [{}])[0]
 
-    # source from og:site_name if present
     source_name = metatags.get("og:site_name") or item.get("displayLink") or "Unknown Source"
 
-    # image candidates
     image = metatags.get("og:image") or metatags.get("twitter:image")
     if not image:
-        # try cse_image / cse_thumbnail
+        
         image = (pagemap.get("cse_image") or [{}])[0].get("src") or (pagemap.get("cse_thumbnail") or [{}])[0].get("src")
 
-    # meta descriptions
     meta_desc = metatags.get("og:description") or metatags.get("twitter:description")
 
-    # Try to scrape the page for body paragraphs (best)
     link = item.get("link")
     scraped_text = None
     if link:
@@ -65,19 +60,15 @@ def extract_best_text(item):
                 soup = BeautifulSoup(r.text, "html.parser")
                 paragraphs = [p.get_text().strip() for p in soup.find_all("p") if p.get_text().strip()]
                 if paragraphs:
-                    # join first few paragraphs (limit length)
                     scraped_text = " ".join(paragraphs[:6])
         except Exception:
             scraped_text = None
 
-    # choose the best text
     text = scraped_text or meta_desc or item.get("snippet", "")
 
-    # favicon via google service
     display_link = item.get("displayLink") or ""
     favicon = f"https://www.google.com/s2/favicons?sz=64&domain={display_link}" if display_link else None
 
-    # author & published date best-effort
     author = metatags.get("author") or metatags.get("article:author") or item.get("displayLink")
     published_date = (metatags.get("article:published_time") or metatags.get("og:updated_time") or None)
 
@@ -90,7 +81,6 @@ def fetch_articles(query: str) -> list:
     params = {
         "key": API_KEY,
         "cx": CX,
-        # restrict to news domain to get Google News style results
         "q": f"{query} site:news.google.com",
         "num": 10,
     }
@@ -107,7 +97,6 @@ def fetch_articles(query: str) -> list:
 
     for it in items:
         text, source, image, favicon, author, published_date = extract_best_text(it)
-        # truncate text to reasonable length used for sentiment/preview
         preview_text = (text or "").strip()
         if len(preview_text) > 1000:
             preview_text = preview_text[:1000].rsplit(" ", 1)[0] + "..."
@@ -146,7 +135,6 @@ def truncate(text, n=300):
     text = text.strip()
     return text if len(text) <= n else text[:n].rsplit(" ", 1)[0] + "..."
 
-# ---------- Card rendering ----------
 def render_article_card(article):
     """Render a clean article card: title, source, description, sentiment, small image."""
     title = article.get("title", "Untitled")
@@ -206,16 +194,16 @@ with tab_news:
     maxtags=3,
     key="topics_input",
 )
-    st.session_state.topics = topics[:3]  # enforce max 3
+    st.session_state.topics = topics[:3]  
 
-    # ---------- MAIN ACTION ----------
+
     if st.button("Search"):
         if not st.session_state.topics:
             st.warning("Please enter at least one topic (max 3).")
         else:
-            # Fetch articles for each topic (cache by topic)
+          
             all_articles = {}
-            sentiment_summary = []  # list of {topic, sentiment}
+            sentiment_summary = []  
             for topic in st.session_state.topics:
                 if topic not in st.session_state.articles_cache:
                     with st.spinner(f"Searching: {topic}"):
@@ -229,10 +217,8 @@ with tab_news:
                         if lbl:
                             sentiment_summary.append({"topic": topic, "sentiment": lbl})
 
-            # Layout: 3 columns (left - graphs, mid - articles, right - graphs)
             left_col, mid_col, right_col = st.columns([1, 2, 1])
 
-            # LEFT: sentiment histogram + wordcloud
             if sentiment_summary:
                 df_summary = pd.DataFrame(sentiment_summary)
 
@@ -246,16 +232,14 @@ with tab_news:
                 )
                 left_col.plotly_chart(hist_fig, use_container_width=True, key="hist_left_v1")
 
-                # WordCloud across all description text
                 all_text = " ".join([a.get("description", "") for articles in all_articles.values() for a in articles if a.get("description")])
                 if all_text.strip():
                     wc = WordCloud(width=600, height=360, background_color="white").generate(all_text)
                     wc_img = wc.to_image()
                     left_col.image(wc_img, use_column_width=True)
 
-            # RIGHT: bubble chart + pie chart
             if sentiment_summary:
-                # prepare bubble data
+          
                 bubble_rows = []
                 for topic, articles in all_articles.items():
                     scores = [a.get("sentiment", {}).get("scores", {}).get("compound", 0.0) for a in articles if a.get("sentiment")]
@@ -281,7 +265,6 @@ with tab_news:
                 )
                 right_col.plotly_chart(bubble_fig, use_container_width=True, key="bubble_right_v1")
 
-                # pie chart for overall sentiment share
                 sentiment_counts = df_summary["sentiment"].value_counts().reset_index()
                 sentiment_counts.columns = ["sentiment", "count"]
                 pie_fig = px.pie(
@@ -294,14 +277,13 @@ with tab_news:
                 )
                 right_col.plotly_chart(pie_fig, use_container_width=True, key="pie_right_v1")
 
-            # MIDDLE: render articles sequentially (topic-wise)
             st.markdown('<div class="scrollable-articles">', unsafe_allow_html=True)
 
             with mid_col:
                 if not all_articles:
                     st.info("No articles found for selected topics.")
                 else:
-                    # iterate topics in the order they were added
+                    
                     for topic in st.session_state.topics:
                         articles = all_articles.get(topic, [])
                         if articles:
@@ -319,13 +301,12 @@ with tab_chatbot:
         if "find news" in query_lower:
             topic = query_lower.replace("find news on", "").strip()
             if topic:
-                # Fetch up to 3 news articles using your existing fetch_articles()
+             
                 chatbot_articles = fetch_articles(topic)[:3]
                 if chatbot_articles:
                     st.success(f"Here are some articles on '{topic}':")
                     for i, a in enumerate(chatbot_articles, 1):
-                        # Reuse your existing article card style if you want full preview
-                        # OR just simple URLs
+                       
                         st.markdown(f"{i}. [{a['title']}]({a['url']}) - {a['source']}")
                     st.info("Hope this helps! 😊")
                 else:
