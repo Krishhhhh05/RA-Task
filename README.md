@@ -1,0 +1,69 @@
+# News Aggregator with Sentiment Analysis
+
+## 📰 Overview
+This is a multi-topic news aggregator application built with Streamlit that fetches news articles from various sources using Google Custom Search API. The application performs sentiment analysis on news articles, visualizes sentiment distribution, and provides a chatbot interface for quick news queries.
+
+## ✨ Features
+- **Multi-topic News Search**: Search for news on up to 3 different topics
+- **Sentiment Analysis**: Automatically analyzes the sentiment of news articles (Positive, Neutral, Negative)
+- **Rich Visualizations**: View sentiment distribution, word clouds, and statistical charts
+- **Chatbot Interface**: Quick search for news using natural language queries
+- **Responsive UI**: Clean article cards with images, summaries, and sentiment indicators
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.7+
+- Google Custom Search API key and Search Engine ID
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/news-aggregator.git
+cd news-aggregator
+```
+
+2. Install required packages
+```bash
+pip install -r requirements.txt
+```
+
+3. Create a `.env` file in the project root with your API credentials:
+```
+GOOGLE_API_KEY=your_google_api_key
+GOOGLE_CX=your_custom_search_engine_id
+```
+
+### Running the Application
+```bash
+streamlit run main.py
+```
+
+## 🛠️ Technologies Used
+- **Streamlit**: For the web interface
+- **NLTK VADER**: For sentiment analysis
+- **BeautifulSoup**: For web scraping article content
+- **WordCloud**: For generating word clouds
+- **Plotly**: For interactive charts and visualizations
+- **Google Custom Search API**: For fetching news articles
+
+## 📊 Available Visualizations
+- Sentiment distribution across topics (histogram)
+- Word clouds for each topic
+- Overall sentiment share (pie chart)
+- Average sentiment score per topic (bubble chart)
+- Sentiment score distribution (box plot)
+
+## 🔄 How It Works
+1. User enters up to three topics or uses the chatbot to search for news
+2. Application fetches news articles using Google Custom Search API
+3. Each article's content is analyzed for sentiment using NLTK VADER
+4. Results are displayed as article cards with sentiment indicators
+5. Optional statistical visualizations show sentiment trends and patterns
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+
+## 📝 License
+This project is licensed under the MIT License - see the LICENSE file for details.
