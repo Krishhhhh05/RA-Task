@@ -26,12 +26,10 @@ if "articles_cache" not in st.session_state:
 
 SENTIMENT_ICONS = {"Positive": "😊", "Negative": "😠", "Neutral": "😐"}
 
-# API_KEY = "AIzaSyBZnwrh5s7s3TMoQ0fkxE6fbkX-AlGaHdw"  
-# CX = "d5efb0c0edff34023"  
 
 # Get API keys from environment variables
-API_KEY = os.getenv("GOOGLE_API_KEY")
-CX = os.getenv("GOOGLE_CX")
+API_KEY = os.getenv("API_KEY")
+CX = os.getenv("CX")
 
 def extract_best_text(item):
     """
