@@ -1,5 +1,6 @@
 # News Aggregator with Sentiment Analysis
-
+## Streamlit Hosted Site
+https://krishhhhh05-ra-task-app-bq02cq.streamlit.app/
 ## Overview
 This is a multi-topic news aggregator application built with Streamlit that fetches news articles from various sources using Google Custom Search API. The application performs sentiment analysis on news articles, visualizes sentiment distribution, and provides a chatbot interface for quick news queries.
 
@@ -15,23 +16,10 @@ This is a multi-topic news aggregator application built with Streamlit that fetc
 ### Prerequisites
 - Requirements.txt mentioned in the github file
 
-### Installation
 
-1. Clone the repository
-git clone https://github.com/yourusername/news-aggregator.git
-cd news-aggregator
-
-
-2. Install required packages
-
-pip install -r requirements.txt
-
-
-3. Create a `.env` file in the project root with your API credentials:
-```
 GOOGLE_API_KEY=your_google_api_key
 GOOGLE_CX=your_custom_search_engine_id
-```
+
 
 ### Running the Application
 
@@ -59,4 +47,6 @@ streamlit run main.py
 3. Each article's content is analyzed for sentiment using NLTK VADER
 4. Results are displayed as article cards with sentiment indicators
 5. Optional statistical visualizations show sentiment trends and patterns
+
+
 
