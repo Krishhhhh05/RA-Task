@@ -1,6 +1,8 @@
 # News Aggregator with Sentiment Analysis
 ## Streamlit Hosted Site
 https://krishhhhh05-ra-task-app-bq02cq.streamlit.app/
+<img width="1778" height="472" alt="Screenshot 2025-10-08 103033" src="https://github.com/user-attachments/assets/06f9c287-edde-47aa-9dd4-b24353ed1d7b" />
+
 ## Overview
 This is a multi-topic news aggregator application built with Streamlit that fetches news articles from various sources using Google Custom Search API. The application performs sentiment analysis on news articles, visualizes sentiment distribution, and provides a chatbot interface for quick news queries.
 
