@@ -21,7 +21,6 @@ This is a multi-topic news aggregator application built with Streamlit that fetc
 
 - **Chatbot Interface**: AI based Quick search for news using natural language queries
 <img width="1777" height="815" alt="ra7" src="https://github.com/user-attachments/assets/96dd82bb-e047-44f1-a275-629df7906c4a" />
-<img width="1778" height="472" alt="Screenshot 2025-10-08 103033" src="https://github.com/user-attachments/assets/97992025-fba5-426a-8d9e-f75b95c4242e" />
 
 
 - **Responsive UI**: Clean article cards with images, summaries, and sentiment indicators
